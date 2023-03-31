@@ -25,6 +25,7 @@ public class Enemy : MonoBehaviour
         if (actualLife < 1) // Quando a bala atingir o inimigo a vida dele vai abaixar e se for menor que 1 o inimigo morre
         {
             anim.SetBool("Die", true);  // nesse caso queremos que a animação de morte rode antes de destruir o objeto
+            tag = "Untagged";
             Destroy(this.gameObject, 1);
         }
         if (canShoot == true)
@@ -45,6 +46,7 @@ public class Enemy : MonoBehaviour
         if (col.tag == "Player")
         {
             actualLife--;
+            Destroy(col.gameObject);
         }
     }
     public IEnumerator ShootTime()    // Esta é uma corotina(coroutines) elas param o código por um determinado tempo
