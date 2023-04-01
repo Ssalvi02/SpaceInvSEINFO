@@ -18,4 +18,15 @@ public class Bullet : MonoBehaviour
     {
         rb.MovePosition(rb.position + new Vector2(0, 1) * speed);
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log(collision.collider.tag);
+
+        if ((tag.StartsWith("P") && collision.collider.name.StartsWith("e")) || (tag == "Enemy" && collision.collider.tag == "Player"))
+        {
+            Debug.Log("DESTROI");
+            Destroy(gameObject);
+        }
+    }
 }
