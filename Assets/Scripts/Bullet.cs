@@ -18,4 +18,11 @@ public class Bullet : MonoBehaviour
     {
         rb.MovePosition(rb.position + new Vector2(0, 1) * speed);
     }
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.tag == "Wall")
+        {
+            Destroy(this.gameObject);
+        }
+    }
 }
