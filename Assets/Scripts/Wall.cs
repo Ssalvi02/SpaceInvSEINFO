@@ -19,8 +19,6 @@ public class Wall : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.tag == "Enemy")
-        {
             life--;
             if (life < 1)
             {
@@ -30,7 +28,6 @@ public class Wall : MonoBehaviour
             {
                 GetComponent<SpriteRenderer>().sprite = sprites[life - 1];
             }
-        }
 
     }
 }
