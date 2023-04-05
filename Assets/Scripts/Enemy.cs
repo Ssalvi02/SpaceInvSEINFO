@@ -5,12 +5,14 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public int actualLife;
+    public int points;
     public float timeToShoot;
     public float maxTime;
     public float minTime;
     public float timer;
     public bool canShoot = false;
     public GameObject bullet;
+    public GameController gc;
     Animator anim;
 
     // Start is called before the first frame update
@@ -19,6 +21,7 @@ public class Enemy : MonoBehaviour
         anim = GetComponent<Animator>();
         timeToShoot = Random.Range(maxTime, minTime);
         timer = timeToShoot;
+        gc = GameObject.Find("Game").GetComponent<GameController>();
     }
 
     // Update is called once per frame
@@ -67,6 +70,7 @@ public class Enemy : MonoBehaviour
         if (col.tag == "Player")
         {
             actualLife--;
+            gc.game_points += points;
             Destroy(col.gameObject);
         }
     }
