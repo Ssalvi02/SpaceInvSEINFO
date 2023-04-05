@@ -122,7 +122,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actualLife: 1
-  timeToShoot: 5
+  timeToShoot: 0
+  maxTime: 20
+  minTime: 5
+  timer: 0
   canShoot: 0
   bullet: {fileID: 5701019505824540049, guid: edc1699501f6b1848be02453f3f63b22, type: 3}
 --- !u!61 &7341940433908301159

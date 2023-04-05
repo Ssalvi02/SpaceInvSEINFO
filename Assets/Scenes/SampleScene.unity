@@ -2173,9 +2173,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a553b7ae030b92f4ca1484e2d6c0e146, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delay: 0.5
   canMove: 0
+  delay: 0.4
   timeToMove: 2
+  timer: 0
   amountMove: 2
   maxRange: 12
 --- !u!1001 &1308647351
@@ -2464,9 +2465,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a553b7ae030b92f4ca1484e2d6c0e146, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delay: 0.6
   canMove: 0
+  delay: 0.6
   timeToMove: 2
+  timer: 0
   amountMove: 2
   maxRange: 12
 --- !u!1001 &1550208195
@@ -2612,9 +2614,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a553b7ae030b92f4ca1484e2d6c0e146, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delay: 0.7
   canMove: 0
+  delay: 0.8
   timeToMove: 2
+  timer: 0
   amountMove: 2
   maxRange: 12
 --- !u!1001 &1605808016

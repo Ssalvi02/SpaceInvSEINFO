@@ -6,17 +6,19 @@ public class Enemy : MonoBehaviour
 {
     public int actualLife;
     public float timeToShoot;
+    public float maxTime;
+    public float minTime;
+    public float timer;
     public bool canShoot = false;
     public GameObject bullet;
-    Rigidbody2D rb;
     Animator anim;
 
     // Start is called before the first frame update
     void Start()
     {
         anim = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody2D>();
-        StartCoroutine(ShootTime());
+        timeToShoot = Random.Range(maxTime, minTime);
+        timer = timeToShoot;
     }
 
     // Update is called once per frame
@@ -24,22 +26,41 @@ public class Enemy : MonoBehaviour
     {
         if (actualLife < 1) // Quando a bala atingir o inimigo a vida dele vai abaixar e se for menor que 1 o inimigo morre
         {
-            anim.SetBool("Die", true);  // nesse caso queremos que a animação de morte rode antes de destruir o objeto
-            tag = "Untagged";
-            Destroy(this.gameObject, 1);
+            Die();
         }
-        if (canShoot == true)
+        else
         {
             Shoot();
         }
     }
     void Shoot()
     {
-        canShoot = false;
-        GameObject bulletOBJ = Instantiate(bullet, transform.position, Quaternion.identity);// nessa instanciação o inimigo define qual bala ele ira criar (ele sabe)/ está guardado
-        bulletOBJ.GetComponent<Bullet>().speed = -bulletOBJ.GetComponent<Bullet>().speed;   // aqui para inverter a velocidade iremos deixa a velocidade negativa
-        bulletOBJ.tag = "Enemy"; // como temos a bala salva podemos atribuir a ela uma tag para acertar apenas o player
-        StartCoroutine(ShootTime());
+        if (canShoot)   // se pode atirar roda o if
+        {
+            canShoot = false;
+            GameObject bulletOBJ = Instantiate(bullet, transform.position, Quaternion.identity);// nessa instanciação o inimigo define qual bala ele ira criar (ele sabe)/ está guardado
+            bulletOBJ.GetComponent<Bullet>().speed = -bulletOBJ.GetComponent<Bullet>().speed;   // aqui para inverter a velocidade iremos deixa a velocidade negativa
+            bulletOBJ.tag = "Enemy"; // como temos a bala salva podemos atribuir a ela uma tag para acertar apenas o player
+        }
+        else            // se não pode atirar roda o timer
+        {
+            if (timer > 0)// enquanto o timer for maior que 0 vai subtraindo do tempo e seta o canShoot para falso
+            {
+                canShoot = false;
+                timer -= Time.deltaTime;
+            }
+            else    // se o timer for menor que zero resetamos ele para o valor inicial de timeToShoot e setamos canShoot para true
+            {
+                canShoot = true;
+                timer = timeToShoot;
+            }
+        }
+    }
+    void Die()
+    {
+        anim.SetBool("Die", true);  // nesse caso queremos que a animação de morte rode antes de destruir o objeto
+        tag = "Untagged";
+        Destroy(this.gameObject, 1);
     }
     void OnTriggerEnter2D(Collider2D col)
     {
@@ -48,10 +69,5 @@ public class Enemy : MonoBehaviour
             actualLife--;
             Destroy(col.gameObject);
         }
-    }
-    public IEnumerator ShootTime()    // Esta é uma corotina(coroutines) elas param o código por um determinado tempo
-    {
-        yield return new WaitForSeconds(Random.Range(timeToShoot, 20));   // e depois desse tempo continua
-        canShoot = true;
     }
 }

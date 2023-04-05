@@ -14,7 +14,7 @@ public class Bullet : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         rb.MovePosition(rb.position + new Vector2(0, 1) * speed);
     }
