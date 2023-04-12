@@ -39,11 +39,11 @@ public class MenuController : MonoBehaviour
             }
             if (pos_id == 1)
             {
-
+                SceneManager.LoadScene(2);
             }
             if (pos_id == 2)
             {
-
+                Application.Quit();
             }
         }
         selector.transform.position = positions[pos_id] * Camera.main.orthographicSize;
