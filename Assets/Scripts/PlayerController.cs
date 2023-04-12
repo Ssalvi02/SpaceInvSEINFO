@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using TMPro;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -12,12 +13,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject bullet;
     [SerializeField] private bool can_shoot = true;
     [SerializeField] private float shot_time = 1f;
+    public Sprite deathIMG;
+    public GameObject numLife;
+    public GameObject[] lifes;
     public int actualLife;
-    Animator anim;
     // Start is called before the first frame update
     void Start()
     {
-        anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -26,7 +28,7 @@ public class PlayerController : MonoBehaviour
     {
         if (actualLife < 1) // Quando a bala atingir o inimigo a vida dele vai abaixar e se for menor que 1 o inimigo morre
         {
-            anim.SetBool("Die", true);  // nesse caso queremos que a animação de morte rode antes de destruir o objeto
+            GetComponent<SpriteRenderer>().sprite = deathIMG;  // nesse caso queremos que a animação de morte rode antes de destruir o objeto
             Destroy(this.gameObject, 1);
         }
         else
@@ -34,6 +36,7 @@ public class PlayerController : MonoBehaviour
             PlayerMovement();
             Shoot();
         }
+
     }
 
     private void Shoot()
@@ -69,11 +72,18 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector2(0f, 0f);
         }
     }
+    void takeLife()
+    {
+        lifes[actualLife - 1].SetActive(false);
+        actualLife--;
+        numLife.GetComponent<TMP_Text>().text = actualLife.ToString();
+
+    }
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.tag == "Enemy")
         {
-            actualLife--;
+            takeLife();
             Destroy(col.gameObject);
         }
     }

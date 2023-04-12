@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour
     public float timer;
     public bool canShoot = false;
     public GameObject bullet;
+    public Sprite deathIMG;
     public GameController gc;
     Animator anim;
 
@@ -61,7 +62,7 @@ public class Enemy : MonoBehaviour
     }
     void Die()
     {
-        anim.SetBool("Die", true);  // nesse caso queremos que a animação de morte rode antes de destruir o objeto
+        GetComponent<SpriteRenderer>().sprite = deathIMG;  // nesse caso queremos que a animação de morte rode antes de destruir o objeto
         tag = "Untagged";
         Destroy(this.gameObject, 1);
     }
