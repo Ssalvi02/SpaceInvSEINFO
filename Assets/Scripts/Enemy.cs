@@ -64,6 +64,7 @@ public class Enemy : MonoBehaviour
     {
         GetComponent<SpriteRenderer>().sprite = deathIMG;  // nesse caso queremos que a animação de morte rode antes de destruir o objeto
         tag = "Untagged";
+        gc.numEnemys--;
         Destroy(this.gameObject, 1);
     }
     void OnTriggerEnter2D(Collider2D col)

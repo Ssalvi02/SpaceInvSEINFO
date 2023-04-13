@@ -11,8 +11,12 @@ public class GameController : MonoBehaviour
     public bool restart;
     public float timeToRestart;
     public int game_points = 0;
+    public int numEnemys = 0;
     public PlayerController[] players;
     private TextMeshProUGUI text_pts;
+    public GameObject loseUI;
+    public GameObject WinUI;
+    public GameObject canvas;
 
     void Start()
     {
@@ -32,6 +36,12 @@ public class GameController : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
         text_pts.text = "Score: " + game_points;
+        if (numEnemys <= 0)
+        {
+            Instantiate(WinUI, new Vector2(960, 540), Quaternion.identity, canvas.transform);
+            restart = true;
+        }
+
         for (int i = 0; i < players.Length; i++)
         {
             if (players[i].current_life > 0)
@@ -39,6 +49,7 @@ public class GameController : MonoBehaviour
                 return;
             }
         }
+        Instantiate(loseUI, new Vector2(960, 540), Quaternion.identity, canvas.transform);
         restart = true;
     }
 }

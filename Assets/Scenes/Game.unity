@@ -1135,8 +1135,12 @@ MonoBehaviour:
   restart: 0
   timeToRestart: 0
   game_points: 0
+  numEnemys: 21
   players:
   - {fileID: 19376599}
+  loseUI: {fileID: 6143061743287669857, guid: f4f89ff43c54ce340a2981264e4ea341, type: 3}
+  WinUI: {fileID: 1613410421175242449, guid: ede7fce6841529f4cbe11f5ba41e2c1c, type: 3}
+  canvas: {fileID: 929648038}
 --- !u!1001 &709692409
 PrefabInstance:
   m_ObjectHideFlags: 0
