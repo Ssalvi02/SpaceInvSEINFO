@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine;
 
@@ -14,7 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool can_shoot = true;
     [SerializeField] private float shot_time = 1f;
     [Header("Life")]
-    [SerializeField] private int current_life;
+    [SerializeField] public int current_life;
     [SerializeField] private Sprite death_img;
     [Header("LifeSprites")]
     [SerializeField] private GameObject[] lifesp1;
@@ -35,14 +34,13 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (current_life < 1) // Quando a bala atingir o inimigo a vida dele vai abaixar e se for menor que 1 o inimigo morre
+        if (current_life < 1)// Quando a bala atingir o inimigo a vida dele vai abaixar e se for menor que 1 o inimigo morre
         {
-            GetComponent<SpriteRenderer>().sprite = death_img;  // nesse caso queremos que a animação de morte rode antes de destruir o objeto
-            Destroy(this.gameObject, 1);
+            Death();
         }
         else
         {
-            if(!sec_player)
+            if (!sec_player)
             {
                 PlayerOneMovement();
                 PlayerOneShoot();
@@ -124,15 +122,28 @@ public class PlayerController : MonoBehaviour
     }
     void TakeLifeP1()
     {
-        lifesp1[current_life - 1].SetActive(false);
-        current_life--;
+        if (current_life > 0)
+        {
+            lifesp1[current_life - 1].SetActive(false);
+            current_life--;
+
+        }
         n_lifep1.GetComponent<TMP_Text>().text = current_life.ToString();
     }
     void TakeLifeP2()
     {
-        lifesp2[current_life - 1].SetActive(false);
-        current_life--;
+        if (current_life >= 0)
+        {
+            lifesp2[current_life - 1].SetActive(false);
+            current_life--;
+        }
         n_lifep2.GetComponent<TMP_Text>().text = current_life.ToString();
+    }
+    void Death()
+    {
+        GetComponent<SpriteRenderer>().sprite = death_img;  // nesse caso queremos que a animação de morte rode antes de destruir o objeto
+        GetComponent<Collider2D>().enabled = false;
+        Destroy(this.gameObject, 1);
     }
 
     void OnTriggerEnter2D(Collider2D col)
