@@ -11,6 +11,7 @@ public class Enemy : MonoBehaviour
     public float minTime;
     public float timer;
     public bool canShoot = false;
+    bool die = false;
     public GameObject bullet;
     public Sprite deathIMG;
     public GameController gc;
@@ -28,9 +29,10 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (actualLife < 1) // Quando a bala atingir o inimigo a vida dele vai abaixar e se for menor que 1 o inimigo morre
+        if (actualLife < 1 && die == false) // Quando a bala atingir o inimigo a vida dele vai abaixar e se for menor que 1 o inimigo morre
         {
             Die();
+            die = true;
         }
         else
         {
