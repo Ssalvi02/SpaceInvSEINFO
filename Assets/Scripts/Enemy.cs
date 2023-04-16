@@ -5,6 +5,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public int actualLife;
+    public int base_points;
     public int points;
     public float timeToShoot;
     public float maxTime;
@@ -24,6 +25,9 @@ public class Enemy : MonoBehaviour
         timeToShoot = Random.Range(maxTime, minTime);
         timer = timeToShoot;
         gc = GameObject.Find("Game").GetComponent<GameController>();
+
+        points = base_points + (Mathf.CeilToInt(gc.n_restart) * 5);
+
     }
 
     // Update is called once per frame
@@ -67,7 +71,7 @@ public class Enemy : MonoBehaviour
         GetComponent<SpriteRenderer>().sprite = deathIMG;  // nesse caso queremos que a animação de morte rode antes de destruir o objeto
         tag = "Untagged";
         gc.numEnemys--;
-        Destroy(this.gameObject, 1);
+        Destroy(this.gameObject, 0.4f);
     }
     void OnTriggerEnter2D(Collider2D col)
     {

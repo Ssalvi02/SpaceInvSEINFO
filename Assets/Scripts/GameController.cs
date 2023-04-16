@@ -10,6 +10,7 @@ public class GameController : MonoBehaviour
     public bool p2Die;
     public bool restart;
     public float timeToRestart;
+    public float n_restart = 0;
     public int game_points = 0;
     public int numEnemys = 0;
     public PlayerController[] players;
@@ -21,18 +22,28 @@ public class GameController : MonoBehaviour
     void Start()
     {
         text_pts = GameObject.Find("Canvas/Score").GetComponent<TextMeshProUGUI>();
+        n_restart = PlayerPrefs.GetFloat("Resets");
+        game_points = PlayerPrefs.GetInt("Score");
         text_pts.text = "Score: " + game_points;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(Input.GetKey(KeyCode.Escape))
+        {
+            SceneManager.LoadScene(0);
+        }
+
         if (restart)
         {
             timeToRestart += Time.deltaTime;
         }
-        if (timeToRestart >= 2)
+        if (timeToRestart >= 3)
         {
+            n_restart += 0.2f;
+            PlayerPrefs.SetInt("Score", game_points);
+            PlayerPrefs.SetFloat("Resets", n_restart);
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
         text_pts.text = "Score: " + game_points;
@@ -51,5 +62,11 @@ public class GameController : MonoBehaviour
         }
         Instantiate(loseUI, new Vector2(960, 540), Quaternion.identity, canvas.transform);
         restart = true;
+
+
+    }
+    private void OnApplicationQuit()
+    {
+        PlayerPrefs.DeleteAll();
     }
 }

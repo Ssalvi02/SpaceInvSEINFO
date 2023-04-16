@@ -10,6 +10,7 @@ public class BlockMove : MonoBehaviour
     public float timer;
     public float amountMove;
     public float maxRange;
+    public GameController gc;
     bool startMove;
     bool left;
     Rigidbody2D rb;
@@ -19,6 +20,12 @@ public class BlockMove : MonoBehaviour
         startMove = true;
         left = false;
         rb = GetComponent<Rigidbody2D>();
+        gc = GameObject.Find("Game").GetComponent<GameController>();
+        timeToMove -= gc.n_restart;
+        if(timeToMove <= 0.8f)
+        {
+            timeToMove = 0.8f;
+        }
         timer = timeToMove;
     }
 

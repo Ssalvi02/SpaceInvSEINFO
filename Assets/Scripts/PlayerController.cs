@@ -22,6 +22,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject n_lifep2;
     [Header("2Players")]
     [SerializeField] private bool sec_player = false;
+    [Header("GameController")]
+    public GameController gc;
 
 
 
@@ -29,6 +31,13 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        gc = GameObject.Find("Game").GetComponent<GameController>();
+        
+        speed += Mathf.CeilToInt(gc.n_restart);
+        if(speed > 20)
+        {
+            speed = 20;
+        }
     }
 
     // Update is called once per frame
@@ -59,7 +68,11 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && can_shoot)
         {
             can_shoot = false;
-            shot_time = 1f;
+            shot_time = 1f - gc.n_restart;
+            if(shot_time <= 0.4f)
+            {
+                shot_time = 0.4f;
+            }
             GameObject bulletOBJ = Instantiate(bullet, transform.position, Quaternion.identity);
             bulletOBJ.tag = "Player";
         }
@@ -77,7 +90,11 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.L) && can_shoot)
         {
             can_shoot = false;
-            shot_time = 1f;
+            shot_time = 1f - gc.n_restart;
+            if (shot_time <= 0.4f)
+            {
+                shot_time = 0.4f;
+            }
             GameObject bulletOBJ = Instantiate(bullet, transform.position, Quaternion.identity);
             bulletOBJ.tag = "Player";
         }
