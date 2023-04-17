@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     [Header("Movement")]
     [SerializeField] private Rigidbody2D rb;
     public int speed = 10;
+    public int maxX = 22;
     [Header("Shot")]
     [SerializeField] private GameObject bullet;
     [SerializeField] private bool can_shoot = true;
@@ -16,16 +17,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public int current_life;
     [SerializeField] private Sprite death_img;
     [Header("LifeSprites")]
-    [SerializeField] private GameObject[] lifesp1;
-    [SerializeField] private GameObject[] lifesp2;
-    [SerializeField] private GameObject n_lifep1;
-    [SerializeField] private GameObject n_lifep2;
-    [Header("2Players")]
-    [SerializeField] private bool sec_player = false;
+    [SerializeField] private RectTransform lifesIcon;
+    [SerializeField] public TMP_Text n_life;
     [Header("GameController")]
     public GameController gc;
 
-
+    public KeyCode keyLeft;
+    public KeyCode keyRight;
+    public KeyCode keyFire;
 
     // Start is called before the first frame update
     void Start()
@@ -38,143 +37,93 @@ public class PlayerController : MonoBehaviour
         {
             speed = 20;
         }
+        UpdateHud();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (current_life < 1)// Quando a bala atingir o inimigo a vida dele vai abaixar e se for menor que 1 o inimigo morre
+        PlayerMovement();
+        PlayerShoot();
+    }
+
+    private void PlayerShoot()
+    {
+        if (Input.GetKeyDown(keyFire) && can_shoot)
+        {
+            can_shoot = false;
+            shot_time = 1f - gc.n_restart;
+            if (shot_time <= 0.4f)
+            {
+                shot_time = 0.4f;
+            }
+            GameObject bulletOBJ = Instantiate(bullet,
+                transform.position + new Vector3(0, 2, 0), Quaternion.identity);
+
+            bulletOBJ.tag = "Player";
+        }
+
+        shot_time -= Time.deltaTime;
+
+        if (shot_time < 0)
+        {
+            can_shoot = true;
+        }
+    }
+
+    private void PlayerMovement()
+    {
+        rb.velocity = new Vector2(0f, 0f);
+        if (Input.GetKey(keyLeft))
+        {
+            rb.velocity = new Vector2(-speed, 0f);
+        }
+        else if (Input.GetKey(keyRight))
+        {
+            rb.velocity = new Vector2(speed, 0f);
+        }
+
+        Vector3 pos = rb.transform.position;
+        if (pos.x < -maxX)
+        {
+            pos.x = -maxX;
+        }
+        else if (pos.x > maxX)
+        {
+            pos.x = maxX;
+        }
+        rb.transform.position = pos;
+
+
+    }
+
+    void TakeLife()
+    {
+        current_life--;
+        UpdateHud();
+        if (current_life <= 0)
         {
             Death();
+            gc.PlayerDestroyed();
         }
-        else
-        {
-            if (!sec_player)
-            {
-                PlayerOneMovement();
-                PlayerOneShoot();
-            }
-            else
-            {
-                PlayerTwoMovement();
-                PlayerTwoShoot();
-            }
-        }
-
     }
 
-    private void PlayerOneShoot()
+    public void UpdateHud()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && can_shoot)
-        {
-            can_shoot = false;
-            shot_time = 1f - gc.n_restart;
-            if (shot_time <= 0.4f)
-            {
-                shot_time = 0.4f;
-            }
-            GameObject bulletOBJ = Instantiate(bullet, transform.position, Quaternion.identity);
-            bulletOBJ.tag = "Player";
-        }
-
-        shot_time -= Time.deltaTime;
-
-        if (shot_time < 0)
-        {
-            can_shoot = true;
-        }
+        lifesIcon.sizeDelta = new Vector2(current_life * 100, lifesIcon.sizeDelta.y);
+        n_life.text = current_life.ToString();
     }
 
-    private void PlayerTwoShoot()
-    {
-        if (Input.GetKeyDown(KeyCode.L) && can_shoot)
-        {
-            can_shoot = false;
-            shot_time = 1f - gc.n_restart;
-            if (shot_time <= 0.4f)
-            {
-                shot_time = 0.4f;
-            }
-            GameObject bulletOBJ = Instantiate(bullet, transform.position, Quaternion.identity);
-            bulletOBJ.tag = "Player";
-        }
-
-        shot_time -= Time.deltaTime;
-
-        if (shot_time < 0)
-        {
-            can_shoot = true;
-        }
-    }
-
-    private void PlayerOneMovement()
-    {
-        if (Input.GetKey(KeyCode.A))
-        {
-            rb.velocity = new Vector2(-speed, 0f);
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            rb.velocity = new Vector2(speed, 0f);
-        }
-        else
-        {
-            rb.velocity = new Vector2(0f, 0f);
-        }
-    }
-    private void PlayerTwoMovement()
-    {
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            rb.velocity = new Vector2(-speed, 0f);
-        }
-        else if (Input.GetKey(KeyCode.RightArrow))
-        {
-            rb.velocity = new Vector2(speed, 0f);
-        }
-        else
-        {
-            rb.velocity = new Vector2(0f, 0f);
-        }
-    }
-    void TakeLifeP1()
-    {
-        if (current_life > 0)   // pode dar index out of range
-        {
-            lifesp1[current_life - 1].SetActive(false); //como current life é um valor que não existe no index temos que subtrair 1 para 
-                                                        //não ficar fora do index
-            current_life--;
-
-        }
-        n_lifep1.GetComponent<TMP_Text>().text = current_life.ToString(); //aqui alteramos o valor de texto da vida 
-    }
-    void TakeLifeP2()
-    {
-        if (current_life >= 0)
-        {
-            lifesp2[current_life - 1].SetActive(false);
-            current_life--;
-        }
-        n_lifep2.GetComponent<TMP_Text>().text = current_life.ToString();
-    }
     public void Death()
     {
         GetComponent<SpriteRenderer>().sprite = death_img;  // nesse caso queremos que a animação de morte rode antes de destruir o objeto
         GetComponent<Collider2D>().enabled = false;
-        Destroy(this.gameObject, 1);
+        Destroy(this.gameObject, 0.8f);
     }
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.tag == "Enemy" && !sec_player)
-        {
-            TakeLifeP1();
-            Destroy(col.gameObject);
-        }
-        if (col.tag == "Enemy" && sec_player)
-        {
-            TakeLifeP2();
-            Destroy(col.gameObject);
-        }
+        TakeLife();
+        Destroy(col.gameObject);
     }
 }

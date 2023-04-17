@@ -51,6 +51,9 @@ public class BlockMove : MonoBehaviour
         if (transform.position.y <= -2) //quando o bloco estiver em certa posição o player perde o jogo
         {
             GameObject.Find("player").GetComponent<PlayerController>().current_life = 0;
+            GameObject.Find("player").GetComponent<PlayerController>().UpdateHud();
+            GameObject.Find("player").GetComponent<PlayerController>().Death();
+            gc.PlayerDestroyed();
         }
     }
     void DelayMove()
