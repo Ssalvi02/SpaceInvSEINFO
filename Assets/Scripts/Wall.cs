@@ -9,15 +9,15 @@ public class Wall : MonoBehaviour
     // Start is called before the first frame update
     void OnTriggerEnter2D(Collider2D col)
     {
-            life--;
-            if (life < 1)
-            {
-                Destroy(this.gameObject);
-            }
-            else
-            {
-                GetComponent<SpriteRenderer>().sprite = sprites[life - 1];
-            }
+        life--;
+        if (life < 1)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            GetComponent<SpriteRenderer>().sprite = sprites[life - 1];  //pode dar erro de index out of range
+        }
 
     }
 }

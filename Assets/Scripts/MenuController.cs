@@ -18,7 +18,7 @@ public class MenuController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             pos_id++;
-            if (pos_id > 2)
+            if (pos_id > 2) //se estive na posição máxima volta para o início
             {
                 pos_id = 2;
             }
@@ -31,7 +31,7 @@ public class MenuController : MonoBehaviour
                 pos_id = 0;
             }
         }
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))    // seleciona a fase
         {
             if (pos_id == 0)
             {
@@ -46,6 +46,6 @@ public class MenuController : MonoBehaviour
                 Application.Quit();
             }
         }
-        selector.transform.position = positions[pos_id] * Camera.main.orthographicSize;
+        selector.transform.position = positions[pos_id];
     }
 }

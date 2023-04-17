@@ -32,9 +32,9 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         gc = GameObject.Find("Game").GetComponent<GameController>();
-        
+
         speed += Mathf.CeilToInt(gc.n_restart);
-        if(speed > 20)
+        if (speed > 20)
         {
             speed = 20;
         }
@@ -69,7 +69,7 @@ public class PlayerController : MonoBehaviour
         {
             can_shoot = false;
             shot_time = 1f - gc.n_restart;
-            if(shot_time <= 0.4f)
+            if (shot_time <= 0.4f)
             {
                 shot_time = 0.4f;
             }
@@ -139,13 +139,14 @@ public class PlayerController : MonoBehaviour
     }
     void TakeLifeP1()
     {
-        if (current_life > 0)
+        if (current_life > 0)   // pode dar index out of range
         {
-            lifesp1[current_life - 1].SetActive(false);
+            lifesp1[current_life - 1].SetActive(false); //como current life é um valor que não existe no index temos que subtrair 1 para 
+                                                        //não ficar fora do index
             current_life--;
 
         }
-        n_lifep1.GetComponent<TMP_Text>().text = current_life.ToString();
+        n_lifep1.GetComponent<TMP_Text>().text = current_life.ToString(); //aqui alteramos o valor de texto da vida 
     }
     void TakeLifeP2()
     {
@@ -156,7 +157,7 @@ public class PlayerController : MonoBehaviour
         }
         n_lifep2.GetComponent<TMP_Text>().text = current_life.ToString();
     }
-    void Death()
+    public void Death()
     {
         GetComponent<SpriteRenderer>().sprite = death_img;  // nesse caso queremos que a animação de morte rode antes de destruir o objeto
         GetComponent<Collider2D>().enabled = false;

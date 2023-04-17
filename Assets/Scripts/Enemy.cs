@@ -5,28 +5,25 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public int actualLife;
-    public int base_points;
-    public int points;
-    public float timeToShoot;
-    public float maxTime;
-    public float minTime;
-    public float timer;
-    public bool canShoot = false;
-    bool die = false;
-    public GameObject bullet;
+    public int base_points;//futuro
+    public int points;  //futuro
+    public float timeToShoot;   
+    public float maxTimeTS; //randomificar tiro
+    public float minTimeTS;
+    public float timer; // variável para ver o timer
+    public bool canShoot = false;   //trigger para tiro
+    bool die = false;   
+    public GameObject bullet;   
     public Sprite deathIMG;
-    public GameController gc;
-    Animator anim;
+    public GameController gc;   //furuto
 
     // Start is called before the first frame update
     void Start()
     {
-        anim = GetComponent<Animator>();
-        timeToShoot = Random.Range(maxTime, minTime);
+        timeToShoot = Random.Range(maxTimeTS, minTimeTS);
         timer = timeToShoot;
-        gc = GameObject.Find("Game").GetComponent<GameController>();
-
-        points = base_points + (Mathf.CeilToInt(gc.n_restart) * 5);
+        gc = GameObject.Find("Game").GetComponent<GameController>();    //futuro
+        points = base_points + (Mathf.CeilToInt(gc.n_restart) * 5);     //futuro
 
     }
 
@@ -36,7 +33,7 @@ public class Enemy : MonoBehaviour
         if (actualLife < 1 && die == false) // Quando a bala atingir o inimigo a vida dele vai abaixar e se for menor que 1 o inimigo morre
         {
             Die();
-            die = true;
+            die = true; //trigger para não poder atirar
         }
         else
         {
@@ -48,8 +45,8 @@ public class Enemy : MonoBehaviour
         if (canShoot)   // se pode atirar roda o if
         {
             canShoot = false;
-            GameObject bulletOBJ = Instantiate(bullet, transform.position, Quaternion.identity);// nessa instanciação o inimigo define qual bala ele ira criar (ele sabe)/ está guardado
-            bulletOBJ.GetComponent<Bullet>().speed = -bulletOBJ.GetComponent<Bullet>().speed;   // aqui para inverter a velocidade iremos deixa a velocidade negativa
+            GameObject bulletOBJ = Instantiate(bullet, transform.position, Quaternion.identity);// nessa instanciação o inimigo define a bala que ele ira criar / está guardado
+            bulletOBJ.GetComponent<Bullet>().speed = -bulletOBJ.GetComponent<Bullet>().speed;   // como usamos a mesma bullet deve-mos apenas inverter a velocidade 
             bulletOBJ.tag = "Enemy"; // como temos a bala salva podemos atribuir a ela uma tag para acertar apenas o player
         }
         else            // se não pode atirar roda o timer
@@ -69,9 +66,9 @@ public class Enemy : MonoBehaviour
     void Die()
     {
         GetComponent<SpriteRenderer>().sprite = deathIMG;  // nesse caso queremos que a animação de morte rode antes de destruir o objeto
-        tag = "Untagged";
-        gc.numEnemys--;
-        Destroy(this.gameObject, 0.4f);
+        tag = "Untagged";   // serve para o inimigo não interagir mais com a bullet
+        gc.numEnemys--;     //futuro
+        Destroy(this.gameObject, 0.4f); 
     }
     void OnTriggerEnter2D(Collider2D col)
     {
@@ -79,7 +76,7 @@ public class Enemy : MonoBehaviour
         {
             actualLife--;
             gc.game_points += points;
-            Destroy(col.gameObject);
+            Destroy(col.gameObject);    //destoi a bullet que entra em contato com o player
         }
     }
 }

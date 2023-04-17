@@ -30,8 +30,9 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKey(KeyCode.Escape))
+        if (Input.GetKey(KeyCode.Escape))
         {
+            PlayerPrefs.SetInt("Score", 0);
             SceneManager.LoadScene(0);
         }
 
@@ -41,15 +42,15 @@ public class GameController : MonoBehaviour
         }
         if (timeToRestart >= 3)
         {
-            n_restart += 0.2f;
-            PlayerPrefs.SetInt("Score", game_points);
-            PlayerPrefs.SetFloat("Resets", n_restart);
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
         text_pts.text = "Score: " + game_points;
-        if (numEnemys <= 0)
+        if (numEnemys <= 0 && restart == false)
         {
             Instantiate(WinUI, new Vector2(960, 540), Quaternion.identity, canvas.transform);
+            n_restart += 0.2f;
+            PlayerPrefs.SetInt("Score", game_points);
+            PlayerPrefs.SetFloat("Resets", n_restart);
             restart = true;
         }
 
@@ -61,6 +62,7 @@ public class GameController : MonoBehaviour
             }
         }
         Instantiate(loseUI, new Vector2(960, 540), Quaternion.identity, canvas.transform);
+        PlayerPrefs.SetInt("Score", 0);
         restart = true;
 
 

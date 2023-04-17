@@ -20,9 +20,9 @@ public class BlockMove : MonoBehaviour
         startMove = true;
         left = false;
         rb = GetComponent<Rigidbody2D>();
-        gc = GameObject.Find("Game").GetComponent<GameController>();
-        timeToMove -= gc.n_restart;
-        if(timeToMove <= 0.8f)
+        gc = GameObject.Find("Game").GetComponent<GameController>();    // futuro
+        timeToMove -= gc.n_restart;                                     // futuro
+        if (timeToMove <= 0.8f) // clamp
         {
             timeToMove = 0.8f;
         }
@@ -32,9 +32,9 @@ public class BlockMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (startMove == true)
-        {
-            DelayMove();
+        if (startMove == true)  //trigger inicial para se movimentar pois queremos que cara bloco se mova em um tempo inicial diferente
+        {                       // e queremos que ele rode apenas no começo
+            DelayMove();        
         }
         else
         {
@@ -42,12 +42,16 @@ public class BlockMove : MonoBehaviour
             {
                 Move();
             }
-            CooldownMove();
+            CooldownMove(); // essa função seta ao valor inicial do contador 
         }
     }
     void GoToFront()
     {
-        transform.position = new Vector2(transform.position.x, transform.position.y - 2);
+        transform.position = new Vector2(transform.position.x, transform.position.y - amountMove);
+        if (transform.position.y <= -2) //quando o bloco estiver em certa posição o player perde o jogo
+        {
+            GameObject.Find("player").GetComponent<PlayerController>().current_life = 0;
+        }
     }
     void DelayMove()
     {
@@ -75,12 +79,12 @@ public class BlockMove : MonoBehaviour
             canMove = true;
         }
     }
-    void Move()
+    void Move() // depois de se mover ele não pode mais se movimentar até que o contador chegue a zero
     {
         if (left)   //para qual lado o bloco deve ir
         {
             transform.position = new Vector2(transform.position.x - amountMove, transform.position.y); // se for parar a esquerda soma-se com a quantidade de nmov
-            if (transform.position.x <= -maxRange)    //verifica se o bloco ja chegou no maximo            
+            if (transform.position.x <= -maxRange)    //verifica se o bloco ja chegou em X maximo            
             {
                 GoToFront();
                 left = false;
@@ -95,6 +99,6 @@ public class BlockMove : MonoBehaviour
                 left = true;
             }
         }
-        canMove = false;
+        canMove = false;    //não deixa o inimigo se mover no update
     }
 }
