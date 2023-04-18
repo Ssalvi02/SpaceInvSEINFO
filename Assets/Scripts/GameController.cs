@@ -33,6 +33,7 @@ public class GameController : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Escape))
         {
+            PlayerPrefs.DeleteAll();
             SceneManager.LoadScene(0);
         }
 
