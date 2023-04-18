@@ -7,6 +7,9 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
     [SerializeField] private Rigidbody2D rb;
+    public KeyCode keyLeft;
+    public KeyCode keyRight;
+    public KeyCode keyFire;
     public int speed = 10;
     public int maxX = 22;
     [Header("Shot")]
@@ -22,9 +25,6 @@ public class PlayerController : MonoBehaviour
     [Header("GameController")]
     public GameController gc;
 
-    public KeyCode keyLeft;
-    public KeyCode keyRight;
-    public KeyCode keyFire;
 
     // Start is called before the first frame update
     void Start()
@@ -57,8 +57,7 @@ public class PlayerController : MonoBehaviour
             {
                 shot_time = 0.4f;
             }
-            GameObject bulletOBJ = Instantiate(bullet,
-                transform.position + new Vector3(0, 2, 0), Quaternion.identity);
+            GameObject bulletOBJ = Instantiate(bullet, transform.position + new Vector3(0, 2, 0), Quaternion.identity);
 
             bulletOBJ.tag = "Player";
         }
@@ -74,6 +73,7 @@ public class PlayerController : MonoBehaviour
     private void PlayerMovement()
     {
         rb.velocity = new Vector2(0f, 0f);
+
         if (Input.GetKey(keyLeft))
         {
             rb.velocity = new Vector2(-speed, 0f);
@@ -93,8 +93,6 @@ public class PlayerController : MonoBehaviour
             pos.x = maxX;
         }
         rb.transform.position = pos;
-
-
     }
 
     void TakeLife()
