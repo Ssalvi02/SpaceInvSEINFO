@@ -11,7 +11,7 @@ public class MenuController : MonoBehaviour
     public Color newColor = Color.yellow;
 
     public int pos_id = 0;
-    public TextMeshProUGUI[] texts = new TextMeshProUGUI[3];
+    public TextMeshProUGUI[] texts;
     public int[] scenes = { 1, 2, -1 };
 
     private void Start()
