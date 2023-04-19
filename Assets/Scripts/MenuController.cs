@@ -2,50 +2,67 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using TMPro;
+using System;
 
 public class MenuController : MonoBehaviour
 {
-    [SerializeField] private GameObject selector;
-    private int pos_id = 0;
-    private Vector3[] positions = { new Vector3(125, 110, 0f), new Vector3(125, 70, 0f), new Vector3(125, 30, 0f) };
-    void Start()
+    public GameObject menuContainer;
+    public Color newColor = Color.yellow;
+
+    public int pos_id = 0;
+    public TextMeshProUGUI[] texts = new TextMeshProUGUI[3];
+    public int[] scenes = { 1, 2, -1 };
+
+    private void Start()
     {
-        // selector = GameObject.Find("Canvas/Selector");
-        selector.transform.localPosition = positions[pos_id];
+        texts = menuContainer.GetComponentsInChildren<TextMeshProUGUI>();
     }
+    void SetSelectedItem(int index, bool selected)
+    {
+        if (selected)
+        {
+            texts[index].color = newColor;
+        }
+        else
+        {
+            texts[index].color = Color.white;
+        }
+    }
+
     void Update()
     {
+        SetSelectedItem(pos_id, false);
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             pos_id++;
-            if (pos_id > 2) //se estive na posição máxima volta para o início
+            if (pos_id >= texts.Length) // menu circular
             {
-                pos_id = 2;
-            }
+                pos_id = 0;
+            }     
         }
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             pos_id--;
             if (pos_id < 0)
             {
-                pos_id = 0;
+                pos_id = texts.Length - 1;
             }
         }
-        if (Input.GetKeyDown(KeyCode.Space))    // seleciona a fase
+        if (Input.GetKeyDown(KeyCode.Return))    // seleciona opção
         {
-            if (pos_id == 0)
-            {
-                SceneManager.LoadScene(1);
-            }
-            if (pos_id == 1)
-            {
-                SceneManager.LoadScene(2);
-            }
-            if (pos_id == 2)
+            int scn = scenes[pos_id];
+
+
+            if (scn == -1)
             {
                 Application.Quit();
             }
+            else
+            {
+                SceneManager.LoadScene(scn);
+            }
         }
-        selector.transform.position = positions[pos_id] * Camera.main.orthographicSize;
+        SetSelectedItem(pos_id, true);
     }
 }
